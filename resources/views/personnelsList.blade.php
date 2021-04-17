@@ -2,11 +2,15 @@
 
 @section('content')
 
+    @if(session('deletePersonnelMSG'))
+        <div class="alert alert-success" >
+            {{session('deletePersonnelMSG')}}
+    @endif
+        </div>
     <div class="card card-primary">
         <div class="card-header">
             <h3 class="card-title">Personnel List</h3>
         </div>
-
         <div class="card-body">
             <div class="table-responsive bg-white" >
                 <table class="table align-items-center">
@@ -22,7 +26,6 @@
                     </tr>
                     </thead>
                     <tbody>
-
                     <?php
                         $a=0;
                         while ($a<count($personnels)){  ?>
@@ -32,15 +35,19 @@
                         <td>{{$personnels[$a]->username}}</td>
                         <td>{{$personnels[$a]->email}}</td>
                         <td>{{$personnels[$a]->phone}}</td>
-                        <td><span class="fa fa-edit" style="color: blue"></span></td>
-                        <td><span class="fa fa-trash" style="color: red"></span></td>
+                        <td><a href="{{route('showEditPersonnel',$personnels[$a]->id)}}" class="btn btn-outline-primary"><span class="fa fa-edit" style="color: blue"></span></a></td>
+                        <td>
+                            <form action="{{route('deletePersonnel')}}" method="post">
+                                @csrf
+                                <input type="hidden" name="personnelID" value="{{$personnels[$a]->id}}">
+                                <input type="hidden" name="userID" value="{{$personnels[$a]->uid}}">
+                                <button type="submit" class="btn btn-outline-danger"><span class="fa fa-trash" style="color: red"></span></button>
+                            </form>
+                        </td>
                     </tr>
             <?php       $a++;
                         }
                     ?>
-
-
-
                     </tbody>
                 </table>
             </div>
