@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\Vehicle;
 use App\Models\Driver;
 use App\Models\Type;
+use Illuminate\Support\Facades\Crypt;
+
 
 class AdminController extends Controller
 {
@@ -33,16 +35,30 @@ class AdminController extends Controller
                 'password'=>'required',
                 'phone'=>'required|max:11',
             ]);
+
+        try {
+            DB::beginTransaction();
             $personnel=new Personnel();
-            $personnel->fname=$request->fname;
-            $personnel->lname=$request->lname;
-            $personnel->phone=$request->phone;
+            $personnel->fname=Crypt::encryptString($request->fname);
+            $personnel->lname=Crypt::encryptString($request->lname);
+            $personnel->phone=Crypt::encryptString($request->phone);
             $personnel->save();
+
             $personnel->profile()->create([
                 'username'=>$request->username,
                 'email'=>$request->email,
                 'password'=>Hash::make($request->password)
             ]);
+            DB::commit();
+        }catch (\Exception $ex){
+            DB::rollBack();
+            throw $ex;
+        }
+
+
+
+
+
 
         return  redirect(route('showNewPersonnel'))->with('newPersonnelMsg','New Personnel Added Successfully');
     }
@@ -68,28 +84,53 @@ class AdminController extends Controller
             'phone'=>'required',
             'username'=>'required'
         ]);
-        $user=User::find($request->userID);
-        $personnel=Personnel::find($request->personnelID);
-        $user->username=$request->username;
-        $user->email=$request->email;
-        if ($request->password != ""){
-            $user->password=Hash::make($request->password);
+
+
+        try {
+            DB::beginTransaction();
+            $user=User::find($request->userID);
+            $personnel=Personnel::find($request->personnelID);
+            $user->username=$request->username;
+            $user->email=$request->email;
+            if ($request->password != ""){
+                $user->password=Hash::make($request->password);
+            }
+            $user->save();
+            $personnel->fname=Crypt::encryptString($request->fname);
+            $personnel->lname=Crypt::encryptString($request->lname);
+            $personnel->phone=Crypt::encryptString($request->phone);
+            $personnel->save();
+
+            DB::commit();
+
+
+
+
+        } catch(\Exception $ex) {
+            DB::rollBack();
+            throw $ex;
+
         }
-        $user->save();
-        $personnel->fname=$request->fname;
-        $personnel->lname=$request->lname;
-        $personnel->phone=$request->phone;
-        $personnel->save();
+
+
         return redirect(route('showEditPersonnel',$request->personnelID))->with('updateSuccessMSG','Information Updated Successfully');
     }
 
     public function deletePersonnel(Request $request){
-       Personnel::destroy($request->personnelID);
-       User::destroy($request->userID);
+
+
+        try {
+            DB::beginTransaction();
+            Personnel::destroy($request->personnelID);
+            User::destroy($request->userID);
+            DB::commit();
+        }catch (\Exception $e){
+            DB::rollBack();
+            throw $e;
+        }
+
        return redirect(route('showPersonnelList'))->with('deletePersonnelMSG','Information Deleted Successfully');
     }
-
-
 
 //         driver functions
 
@@ -101,65 +142,86 @@ class AdminController extends Controller
         return view('newDriver',compact('data'));
     }
     public function showDriverList(){
-        return view('driverList');
+
+        $driverInfo=DB::select('select *,users.id as UID from users inner join drivers on drivers.id = users.profile_id and users.profile_type = ? ',['App\Models\Driver']);
+        return view('driverList',compact('driverInfo'));
     }
 
-    public function insertDriver(Request $request){
-//        $request->validate([
-//
-//        ]);
+    protected function showEditDriver($id)
+    {
+        $driverInfo=DB::select('select *,users.id as UID from users inner join drivers on drivers.id = users.profile_id and users.profile_type = ? and drivers.id = ?  ',['App\Models\Driver',$id]);
 
-        $vehicle= new Vehicle();
-        $driver = new Driver();
-        $licence=new Licence();
-        $owner =new AllOwner();
+        return view('editDriver',compact('driverInfo'));
 
-        $licence->number =$request->lnumber;
-        $licence->create_date =$request->lcdate;
-        $licence->expire_date =$request->ledate;
-        $licence->type=$request->ltype;
-        $licence->save();
-
-        $driver->fname=$request->fname;
-        $driver->lname=$request->lname;
-        $driver->address=$request->address;
-        $driver->phone=$request->phone;
-        $driver->image="ejdbwkdbkneld";
-        $driver->date=$request->birthdate;
-        $driver->licence=$licence->id;
-        $driver->save();
-
-        $driver->profile()->create([
-            'username'=>$request->username,
-            'email'=>$request->email,
-            'password'=>Hash::make($request->password)
+    }
+    protected function UpdateDriver(Request $request)
+    {
+        $request->validate([
+            'fname'=>'required',
+            'lname'=>'required',
+            'email'=>'required|email',
+            'phone'=>'required',
+            'address'=>'required',
+            'username'=>'required',
         ]);
 
-        $vehicle->model_name=$request->cmname;
-        $vehicle->model_number=$request->cmnumber;
-        $vehicle->color=$request->ccolor;
-        $vehicle->model_year=$request->cmyear;
-        $vehicle->manufacture=$request->cmanufacture;
-        $vehicle->plate_number=$request->cplatenumber;
-        $vehicle->type_id=$request->ctype;
-        $vehicle->save();
+        try {
+            DB::beginTransaction();
+            $user=User::find($request->userID);
+            $driver=Driver::find($request->driverID);
+            $user->username=$request->username;
+            $user->email=$request->email;
+            if ($request->password != ""){
+                $user->password=Hash::make($request->password);
+            }
+            $user->save();
+            $driver->fname=Crypt::encryptString($request->fname);
+            $driver->lname=Crypt::encryptString($request->lname);
+            $driver->phone=Crypt::encryptString($request->phone);
+            $driver->address=Crypt::encryptString($request->address);
+            $driver->save();
+            DB::commit();
+        }catch(\Exception $e){
+            DB::rollBack();
+            throw $e;
 
-
-
-
-
-
-        if (AllOwner::orderBy('created_at','desc')->first()){
-            $oid=AllOwner::orderBy('created_at','desc')->first();
-            $owner->id=$oid+1;
-        }else{
-            $owner->id=1;
         }
-        $id=DB::select('select users.id as uid from users inner join drivers on drivers.id=users.profile_id and profile_type LIKE ? and users.profile_id = ? ',['%Driver%',$driver->id]);
-        $owner->driver_id=$id[0]->uid;
-        $owner->car_id=$vehicle->id;
-        $owner->save();
 
+
+        return redirect(route('showEditDriver',$request->driverID))->with('updateSuccessMSGdriver','Information Updated Successfully');
+    }
+
+
+    public function insertDriver(Request $request){
+
+
+        try {
+            DB::beginTransaction();
+            $driver = new Driver();
+            $licence=new Licence();
+            $licence->number =Crypt::encryptString($request->lnumber);
+            $licence->create_date =Crypt::encryptString($request->lcdate);
+            $licence->expire_date =Crypt::encryptString($request->ledate);
+            $licence->type=$request->ltype;
+            $licence->save();
+            $driver->fname=Crypt::encryptString($request->fname);
+            $driver->lname=Crypt::encryptString($request->lname);
+            $driver->address=Crypt::encryptString($request->address);
+            $driver->phone=Crypt::encryptString($request->phone);
+            $driver->wallet=Crypt::encryptString("500");
+            $driver->date=Crypt::encryptString($request->birthdate);
+            $driver->licence=$licence->id;
+            $driver->save();
+            $driver->profile()->create([
+                'username'=>$request->username,
+                'email'=>$request->email,
+                'password'=>Hash::make($request->password)
+            ]);
+            DB::commit();
+        }catch (\Exception $e){
+            DB::rollBack();
+            throw $e;
+        }
         return redirect(route('showNewDriver'))->with('insertDriverMSG','Driver Inserted Successfully');
     }
 
@@ -175,34 +237,54 @@ class AdminController extends Controller
         $request->validate([
             'vehicle_type'=>'required'
         ]);
-        $type=new Type();
-        $type->type_name=$request->vehicle_type;
-        $type->save();
+
+        try {
+            DB::beginTransaction();
+            $type=new Type();
+            $type->type_name=Crypt::encryptString($request->vehicle_type);
+            $type->save();
+            DB::commit();
+        }catch(\Exception $e){
+            DB::rollBack();
+            throw $e;
+        }
         return redirect(route('showVehicleType'))->with('vTypeMSG','information inserted ');
     }
 
 
-
-
-
-
     //////////Licence type
-
 
     public function showLicenceType(){
         return view('LType');
     }
-
     public function insertLtype(Request $request){
         $request->validate([
             'licence_type'=>'required'
         ]);
+        try {
+            DB::beginTransaction();
+            $lType=new Licence_Type();
+            $lType->licence_type=Crypt::encryptString($request->licence_type);
+            $lType->save();
+            DB::commit();
 
-        $lType=new Licence_Type();
-        $lType->licence_type=$request->licence_type;
-        $lType->save();
-
+        }catch (\Exception $e){
+            DB::rollBack();
+            throw $e;
+        }
         return redirect(route('showLicenceType'))->with('lTypeMSG','information inserted ');
+    }
+
+
+
+    public function VTypeList(){
+        $vehicleType=Type::all();
+        return view('vtypeList',compact('vehicleType'));
+    }
+
+    public function LTypeList(){
+        $licenceType=Licence_Type::all();
+        return view('ltypeList',compact('licenceType'));
     }
 
 }

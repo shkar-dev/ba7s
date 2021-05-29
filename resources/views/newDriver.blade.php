@@ -78,57 +78,10 @@
                             <?php
                             $a1=0;
                             while ($a1<count($data['Ltype'])){  ?>
-                            <option value="{{$data['Ltype'][$a1]->id}}">{{$data['Ltype'][$a1]->licence_type}}</option>
+                            <option value="{{$data['Ltype'][$a1]->id}}">{{\Illuminate\Support\Facades\Crypt::decryptString($data['Ltype'][$a1]->licence_type)}}</option>
                        <?php  $a1++;
                             }
-
                             ?>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div class="card-body">
-                <div class="form-row">
-                    <div class="col-md-6">
-                        <label for="exampleInputEmail1">Model Name</label>
-                        <input type="text" class="form-control"  placeholder="Write Model Name" name="cmname">
-                    </div>
-                    <div class="col-md-6">
-                        <label for="exampleInputEmail1">Model Number</label>
-                        <input type="text" class="form-control"  placeholder="Write Model Number" name="cmnumber">
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="col-md-6">
-                        <label for="exampleInputEmail1">Color</label>
-                        <input type="text" class="form-control"  placeholder="Write Color" name="ccolor" >
-                    </div>
-                    <div class="col-md-6">
-                        <label for="exampleInputEmail1">Model Year</label>
-                        <input type="text" class="form-control"  placeholder="Write Model Year" name="cmyear">
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="col-md-6">
-                        <label for="exampleInputEmail1">Manufacture</label>
-                        <input type="text" class="form-control"  placeholder="Write Manufacture" name="cmanufacture">
-                    </div>
-                    <div class="col-md-6">
-                        <label for="exampleInputEmail1">Plate Number</label>
-                        <input type="text" class="form-control"  placeholder="Plate Number" name="cplatenumber">
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="col-md-6">
-                        <label for="exampleInputEmail1">Automobile Type</label>
-                        <select name="ctype" class="form-control">
-                            <option disabled selected>None</option>
-                            <?php
-                            $a=0;
-                            while ($a<count($data['type'])){?>
-                                <option value="{{$data['type'][$a]->id}}">{{$data['type'][$a]->type_name}}</option>
-               <?php  $a++; }?>
                         </select>
                     </div>
                 </div>

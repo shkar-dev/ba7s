@@ -43,6 +43,7 @@ class LoginController extends Controller
                 break;
         }
     }
+
     /**
      * Create a new controller instance.
      *

@@ -13,9 +13,9 @@ class CreatePaymentViolationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('payment_violations', function (Blueprint $table) {
+        Schema::create('payment_violation', function (Blueprint $table) {
             $table->integer('DV_id')->unsigned();
-            $table->integer('transaction_id')->unsigned();
+            $table->integer('transaction_id');
             $table->string('total');
             $table->timestamps();
             $table->foreign('DV_id')->references('id')->on('driver_violations');
@@ -30,6 +30,6 @@ class CreatePaymentViolationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('payment_violations');
+        Schema::dropIfExists('payment_violation');
     }
 }

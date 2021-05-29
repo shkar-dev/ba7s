@@ -31,10 +31,10 @@
                         while ($a<count($personnels)){  ?>
                     <tr>
                         <td>{{$personnels[$a]->id}}</td>
-                        <td>{{$personnels[$a]->fname.' '.$personnels[$a]->lname}}</td>
+                        <td>{{\Illuminate\Support\Facades\Crypt::decryptString($personnels[$a]->fname).' '.\Illuminate\Support\Facades\Crypt::decryptString($personnels[$a]->lname)}}</td>
                         <td>{{$personnels[$a]->username}}</td>
                         <td>{{$personnels[$a]->email}}</td>
-                        <td>{{$personnels[$a]->phone}}</td>
+                        <td>{{\Illuminate\Support\Facades\Crypt::decryptString($personnels[$a]->phone)}}</td>
                         <td><a href="{{route('showEditPersonnel',$personnels[$a]->id)}}" class="btn btn-outline-primary"><span class="fa fa-edit" style="color: blue"></span></a></td>
                         <td>
                             <form action="{{route('deletePersonnel')}}" method="post">

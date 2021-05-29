@@ -21,6 +21,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="Start your development with a Dashboard for Bootstrap 4.">
     <meta name="author" content="Creative Tim">
+    <script src="{{asset('assets/vendor/jquery/dist/jquery.min.js')}}"></script>
     <title>Argon Dashboard - Free Dashboard for Bootstrap 4</title>
     <!-- Favicon -->
     <link rel="icon" href="assets/img/brand/favicon.png" type="image/png">
@@ -63,39 +64,43 @@
                         <div class="collapse" id="navbar-examples1" style="">
                             <ul class="nav nav-sm flex-column">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{route('showNewPersonnel')}}">
+                                    <a class="nav-link" href="{{route('showViolationForm')}}">
                                         Add New
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{route('showPersonnelList')}}">
+                                    <a class="nav-link" href="{{route('showPersonnelViolationList1')}}">
                                         Violation List
                                     </a>
                                 </li>
                             </ul>
                         </div>
                     </li>
+{{--                    <li class="nav-item">--}}
+{{--                        <a class="nav-link active" href="examples/dashboard.html">--}}
+{{--                            <i class="ni ni-tv-2 text-primary"></i>--}}
+{{--                            <span class="nav-link-text">Drivers</span>--}}
+{{--                        </a>--}}
+{{--                    </li>--}}
+{{--                    <li class="nav-item">--}}
+{{--                        <a class="nav-link active" href="examples/dashboard.html">--}}
+{{--                            <i class="ni ni-tv-2 text-primary"></i>--}}
+{{--                            <span class="nav-link-text">Vehicle</span>--}}
+{{--                        </a>--}}
+{{--                    </li>--}}
                     <li class="nav-item">
-                        <a class="nav-link active" href="examples/dashboard.html">
+                        <a class="nav-link active" href="{{ route('logout') }}"
+                           onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
                             <i class="ni ni-tv-2 text-primary"></i>
-                            <span class="nav-link-text">Drivers</span>
+                            <span class="nav-link-text">  {{ __('Logout') }}</span>
+
                         </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="examples/dashboard.html">
-                            <i class="ni ni-tv-2 text-primary"></i>
-                            <span class="nav-link-text">Vehicle</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="examples/dashboard.html">
-                            <i class="ni ni-tv-2 text-primary"></i>
-                            <span class="nav-link-text">Transaction List</span>
-                        </a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                            @csrf
+                        </form>
                     </li>
                 </ul>
-
-
             </div>
         </div>
     </div>
@@ -189,7 +194,7 @@
 
     @yield('personnel_content')
 
-        welcome to personnel
+
     <!-- Footer -->
         <footer class="footer pt-2">
             <div class="row align-items-center justify-content-lg-between">
@@ -219,17 +224,17 @@
     </div>
 </div>
 <!-- Argon Scripts -->
-<!-- Core -->
-<script src="assets/vendor/jquery/dist/jquery.min.js"></script>
-<script src="assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-<script src="assets/vendor/js-cookie/js.cookie.js"></script>
-<script src="assets/vendor/jquery.scrollbar/jquery.scrollbar.min.js"></script>
-<script src="assets/vendor/jquery-scroll-lock/dist/jquery-scrollLock.min.js"></script>
+
+<script src="{{asset('assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js')}}"></script>
+<script src="{{asset('assets/vendor/js-cookie/js.cookie.js')}}"></script>
+<script src="{{asset('assets/vendor/jquery.scrollbar/jquery.scrollbar.min.js')}}"></script>
+<script src="{{asset('assets/vendor/jquery-scroll-lock/dist/jquery-scrollLock.min.js')}}"></script>
 <!-- Optional JS -->
-<script src="assets/vendor/chart.js/dist/Chart.min.js"></script>
-<script src="assets/vendor/chart.js/dist/Chart.extension.js"></script>
+<script src="{{asset('assets/vendor/chart.js/dist/Chart.min.js')}}"></script>
+<script src="{{asset('assets/vendor/chart.js/dist/Chart.extension.js')}}"></script>
 <!-- Argon JS -->
-<script src="assets/js/argon.js?v=1.2.0"></script>
+<script src="{{asset('assets/js/argon.js?v=1.2.0')}}"></script>
+
 </body>
 
 </html>

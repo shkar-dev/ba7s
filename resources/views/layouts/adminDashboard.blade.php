@@ -108,12 +108,12 @@
                         <div class="collapse" id="navbar-examples6" style="">
                             <ul class="nav nav-sm flex-column">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{route('showNewDriver')}}">
+                                    <a class="nav-link" href="{{route('showViolationType')}}">
                                         Add New
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{route('showDriverlList')}}">
+                                    <a class="nav-link" href="{{route('showViolationList')}}">
                                         Violation List
                                     </a>
                                 </li>
@@ -121,27 +121,6 @@
                         </div>
                     </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link active collapsed" href="#navbar-examples5" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="navbar-examples2">
-                            <i class="fab fa-laravel" style="color: #f4645f;"></i>
-                            <span class="nav-link-text" style="color: #f4645f;">Transaction</span>
-                        </a>
-
-                        <div class="collapse" id="navbar-examples5" style="">
-                            <ul class="nav nav-sm flex-column">
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{route('showNewDriver')}}">
-                                       Transaction List
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{route('showDriverlList')}}">
-                                        Completed Transaction
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
 
                     <li class="nav-item">
                         <a class="nav-link active collapsed" href="#navbar-examples3" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="navbar-examples3">
@@ -152,12 +131,12 @@
                         <div class="collapse" id="navbar-examples3" style="">
                             <ul class="nav nav-sm flex-column">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="https://argon-dashboard-laravel.creative-tim.com/profile">
+                                    <a class="nav-link" href="{{route('showVehicleForm')}}">
                                         Add New
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="https://argon-dashboard-laravel.creative-tim.com/user">
+                                    <a class="nav-link" href="{{route('showVehicleList')}}">
                                         Vehicle List
                                     </a>
                                 </li>
@@ -178,7 +157,7 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="https://argon-dashboard-laravel.creative-tim.com/user">
+                                    <a class="nav-link" href="{{route('showVTypeList')}}">
                                         Vehicle Type List
                                     </a>
                                 </li>
@@ -199,7 +178,7 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="https://argon-dashboard-laravel.creative-tim.com/user">
+                                    <a class="nav-link" href="{{route('showLTypeList')}}">
                                       Licence Type List
                                     </a>
                                 </li>
@@ -208,34 +187,17 @@
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link active collapsed" href="#navbar-examples4" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="navbar-examples3">
-                            <i class="fab fa-laravel" style="color: #f4645f;"></i>
-                            <span class="nav-link-text" style="color: #f4645f;">Settings</span>
+                        <a class="nav-link active" href="{{ route('logout') }}"
+                           onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                            <i class="ni ni-tv-2 text-primary"></i>
+                            <span class="nav-link-text">  {{ __('Logout') }}</span>
                         </a>
-
-                        <div class="collapse" id="navbar-examples4" style="">
-                            <ul class="nav nav-sm flex-column">
-                                <li class="nav-item">
-                                    <a class="nav-link" href="https://argon-dashboard-laravel.creative-tim.com/profile">
-                                       Profile
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="https://argon-dashboard-laravel.creative-tim.com/user">
-                                        Change Password
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="https://argon-dashboard-laravel.creative-tim.com/user">
-                                        Logout
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                            @csrf
+                        </form>
                     </li>
                 </ul>
-
-
             </div>
         </div>
     </div>
@@ -356,7 +318,7 @@
             </div>
         </footer>
     </div>
-</div>
+
 <!-- Argon Scripts -->
 <!-- Core -->
 <script src="{{asset('assets/vendor/jquery/dist/jquery.min.js')}}"></script>

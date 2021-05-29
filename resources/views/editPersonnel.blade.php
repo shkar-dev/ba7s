@@ -9,7 +9,7 @@
     @endif
     <div class="card card-primary">
         <div class="card-header">
-            <h3 class="card-title">New Personnel Form</h3>
+            <h3 class="card-title">Edit Personnel Form</h3>
         </div>
         <form role="form"  action="{{route('UpdatePersonnel')}}" method="post">
             @csrf
@@ -18,12 +18,12 @@
             <div class="card-body bg-white" >
                 <div class="form-group">
                     <label for="exampleInputEmail1">First Name</label>
-                    <input type="text" class="form-control"  placeholder="Write Firstname" value="{{$data[0]->fname}}" name="fname">
+                    <input type="text" class="form-control"  placeholder="Write Firstname" value="{{\Illuminate\Support\Facades\Crypt::decryptString($data[0]->fname)}}" name="fname">
                 </div>
 
                 <div class="form-group">
                     <label for="exampleInputPassword1">Second Name</label>
-                    <input type="text" class="form-control"  placeholder="Write Second Name" value="{{$data[0]->lname}}" name="lname">
+                    <input type="text" class="form-control"  placeholder="Write Second Name" value="{{\Illuminate\Support\Facades\Crypt::decryptString($data[0]->lname)}}" name="lname">
                 </div>
                 <div class="form-group">
                     <label for="exampleInputPassword1">Username</label>
@@ -39,7 +39,7 @@
                 </div>
                 <div class="form-group">
                     <label for="exampleInputEmail1">Phone Number</label>
-                    <input type="text" class="form-control"  placeholder="Write Phone Number" value="{{$data[0]->phone}}" name="phone">
+                    <input type="text" class="form-control"  placeholder="Write Phone Number" value="{{\Illuminate\Support\Facades\Crypt::decryptString($data[0]->phone)}}" name="phone">
                 </div>
             </div>
             <!-- /.card-body -->

@@ -23,6 +23,7 @@
     <meta name="author" content="Creative Tim">
     <title>Argon Dashboard - Free Dashboard for Bootstrap 4</title>
     <!-- Favicon -->
+
     <link rel="icon" href="assets/img/brand/favicon.png" type="image/png">
     <!-- Fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700">
@@ -32,6 +33,14 @@
     <!-- Page plugins -->
     <!-- Argon CSS -->
     <link rel="stylesheet" href="assets/css/argon.css?v=1.2.0" type="text/css">
+    <script src="https://js.stripe.com/v3/"></script>
+{{--    <script src="https://js.stripe.com/v3/"></script>--}}
+
+
+{{--    <script src="https://polyfill.io/v3/polyfill.min.js?version=3.52.1&features=fetch"></script>--}}
+{{--    <script src="{{asset('stripe/client.js')}}" defer></script>--}}
+    <script src="{{asset('assets/vendor/jquery/dist/jquery.min.js')}}"></script>
+
 </head>
 
 <body>
@@ -56,34 +65,41 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="examples/dashboard.html">
+                        <a class="nav-link active" href="{{route('driverUnPaiedViolation')}}">
                             <i class="ni ni-tv-2 text-primary"></i>
                             <span class="nav-link-text">Your Violation</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="examples/dashboard.html">
+                        <a class="nav-link active" href="{{route('showPaidViolation')}}">
                             <i class="ni ni-tv-2 text-primary"></i>
                             <span class="nav-link-text">Paid Violation</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="examples/dashboard.html">
+                        <a class="nav-link active" href="{{route('showDriverInformation')}}">
                             <i class="ni ni-tv-2 text-primary"></i>
                             <span class="nav-link-text">Personal Information</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="examples/dashboard.html">
+                        <a class="nav-link active" href="{{route('showDriverVehicleInformation')}}">
                             <i class="ni ni-tv-2 text-primary"></i>
                             <span class="nav-link-text">Vehicle Information</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="examples/dashboard.html">
+                        <a class="nav-link active" href="{{ route('logout') }}"
+                           onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
                             <i class="ni ni-tv-2 text-primary"></i>
-                            <span class="nav-link-text">Logout</span>
+                            <span class="nav-link-text">  {{ __('Logout') }}</span>
+
                         </a>
+
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                            @csrf
+                        </form>
                     </li>
 
                 </ul>
@@ -123,6 +139,17 @@
                                 <i class="sidenav-toggler-line"></i>
                                 <i class="sidenav-toggler-line"></i>
                             </div>
+                        </div>
+                    </li>
+                    <li class="nav-item p-3 mt-3">
+                        <!-- Sidenav toggler -->
+                        <?php
+                        $id=Auth::guard()->user()->id;
+                        $wallet=\Illuminate\Support\Facades\DB::select("select wallet from users inner join drivers on users.profile_id=drivers.id and users.profile_type = ?  and users.id = ? ",['App\Models\Driver',$id]);
+                        ?>
+
+                        <div>
+                            <label for="" style="color: white">My Wallet <span class="fa fa-wallet"></span> :<?php echo \Illuminate\Support\Facades\Crypt::decryptString($wallet[0]->wallet); ?>$</label>
                         </div>
                     </li>
 
@@ -180,7 +207,7 @@
     <!-- Page content -->
     <div class="container-fluid " style="position: relative;top: -50px; ">
     @yield('driver_content')
-    welcome to driver
+
         <footer class="footer pt-2">
             <div class="row align-items-center justify-content-lg-between">
                 <div class="col-lg-6">
@@ -210,16 +237,16 @@
 </div>
 <!-- Argon Scripts -->
 <!-- Core -->
-<script src="assets/vendor/jquery/dist/jquery.min.js"></script>
-<script src="assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-<script src="assets/vendor/js-cookie/js.cookie.js"></script>
-<script src="assets/vendor/jquery.scrollbar/jquery.scrollbar.min.js"></script>
-<script src="assets/vendor/jquery-scroll-lock/dist/jquery-scrollLock.min.js"></script>
+<script src="{{asset('assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js')}}"></script>
+<script src="{{asset('assets/vendor/js-cookie/js.cookie.js')}}"></script>
+<script src="{{asset('assets/vendor/jquery.scrollbar/jquery.scrollbar.min.js')}}"></script>
+<script src="{{asset('assets/vendor/jquery-scroll-lock/dist/jquery-scrollLock.min.js')}}"></script>
 <!-- Optional JS -->
-<script src="assets/vendor/chart.js/dist/Chart.min.js"></script>
-<script src="assets/vendor/chart.js/dist/Chart.extension.js"></script>
+<script src="{{asset('assets/vendor/chart.js/dist/Chart.min.js')}}"></script>
+<script src="{{asset('assets/vendor/chart.js/dist/Chart.extension.js')}}"></script>
 <!-- Argon JS -->
-<script src="assets/js/argon.js?v=1.2.0"></script>
+<script src="{{asset('assets/js/argon.js?v=1.2.0')}}"></script>
+
 </body>
 
 </html>
